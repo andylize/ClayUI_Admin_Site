@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model:Screen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:model="http://wireframesketcher.com/1.0/model.ecore">
+  <widgets xsi:type="model:Browser" id="1" width="801" height="553" text="Browser&#xA;http://..." measuredWidth="801" measuredHeight="553"/>
+  <widgets xsi:type="model:Panel" id="15" y="52" width="801" height="501" measuredWidth="801" measuredHeight="501" background="#444444"/>
+  <widgets xsi:type="model:Panel" id="2" y="125" width="209" height="229" measuredWidth="209" measuredHeight="229" background="#cccccc"/>
+  <widgets xsi:type="model:Panel" id="3" x="208" y="160" width="593" height="321" measuredWidth="593" measuredHeight="321" verticalScrollbar="true"/>
+  <widgets xsi:type="model:Label" id="4" x="24" y="72" text="ClayUI" measuredWidth="75" measuredHeight="36" foreground="#f3f3f3">
+    <font size="18"/>
+  </widgets>
+  <widgets xsi:type="model:HLine" id="6" y="160" width="209" measuredWidth="209" measuredHeight="6"/>
+  <widgets xsi:type="model:Label" id="7" x="10" y="135" text="Application Tree" measuredWidth="96" measuredHeight="23">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Link" id="14" x="149" y="142" text="Add New..>" measuredWidth="58" measuredHeight="21">
+    <font size="8"/>
+  </widgets>
+  <widgets xsi:type="model:Panel" id="16" x="208" y="125" width="593" height="38" measuredWidth="593" measuredHeight="38" background="#cccccc"/>
+  <widgets xsi:type="model:Label" id="17" x="225" y="135" text="Application Details" measuredWidth="108" measuredHeight="23">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Link" id="18" x="10" y="481" text="Add New Application..>" measuredWidth="115" measuredHeight="21">
+    <font size="8"/>
+  </widgets>
+  <widgets xsi:type="model:TextField" id="19" x="299" y="178" width="302" text="Application1" measuredWidth="302" measuredHeight="23">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="20" x="229" y="177" text="Name:" measuredWidth="40" measuredHeight="23">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="22" x="228" y="201" text="Description:" measuredWidth="72" measuredHeight="23">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:TextArea" id="23" x="299" y="208" width="302" height="201" text="This is an example Application." measuredWidth="302" measuredHeight="201" verticalScrollbar="true">
+    <font/>
+  </widgets>
+  <widgets xsi:type="model:Tree" id="24" y="160" width="209" height="321" text="[-] Application1&#xA;-[+] AppPart1&#xA;--[+]Elements&#xA;---Element1&#xA;---Element2&#xA;---Element3&#xA;--DataTable&#xA;- AppPart2&#xA;[-] Application2&#xA;-[+] AppPart1&#xA;[+] Application3" measuredWidth="209" measuredHeight="321" verticalScrollbar="true">
+    <items x="0" y="5" width="192" height="21" text="[-] Application1"/>
+    <items x="0" y="26" width="192" height="21" text="-[+] AppPart1"/>
+    <items x="0" y="47" width="192" height="21" text="--[+]Elements"/>
+    <items x="0" y="68" width="192" height="21" text="---Element1"/>
+    <items x="0" y="89" width="192" height="21" text="---Element2"/>
+    <items x="0" y="110" width="192" height="21" text="---Element3"/>
+    <items x="0" y="131" width="192" height="21" text="--DataTable"/>
+    <items x="0" y="152" width="192" height="21" text="- AppPart2"/>
+    <items x="0" y="173" width="192" height="21" text="[-] Application2"/>
+    <items x="0" y="194" width="192" height="21" text="-[+] AppPart1"/>
+    <items x="0" y="215" width="192" height="21" text="[+] Application3"/>
+  </widgets>
+  <widgets xsi:type="model:Button" id="25" x="556" y="416" text="Save" measuredWidth="45" measuredHeight="25">
+    <font/>
+  </widgets>
+  <hRuler/>
+  <vRuler>
+    <guides position="200"/>
+  </vRuler>
+  <font/>
+</model:Screen>
