@@ -1,20 +1,11 @@
-<html>
-<head>
-	<style>
-		body 
-		{
-			background:#EBEBEB;
-			margin:0;
-			padding:0;
-			font:12px verdana, sans-serif;
-			color:#000;
-		}
-	</style>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html lang="en">
+	<link href="./stylesheets/admin.css" media="screen" rel="stylesheet" type="text/css" />
 </head>
-<body>
-<?php
-	echo "This is the detail area";
- ?>
- </body>
- </html>
+<body class="menu">
+<div class="containerHeader"><span>&nbsp;</span></div>
+<div>Welcome to ClayUI.  Please select an item on the left for more options.</div>
+</body>
+</html>
 

@@ -1,4 +1,6 @@
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html lang="en">
 <head>
 	<link href="./stylesheets/admin.css" media="screen" rel="stylesheet" type="text/css" />
 <?php 
@@ -15,10 +17,10 @@
 ?>
 </head>
 <body class="menu">
-<div style="background-color: #707070; border-style: solid; border-width: 1px; padding-top: 5px; padding-bottom: 5px;">Application Tree<a href="javascript:history.go(0)">Add New..></a></div>
+<div class="containerHeader">Application Tree&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="applicationDetail.php" target="detail">Add New..></a></div>
 	<?php
 		$currentPosition = 1;
-		$lastPosition = 1;
+		$lastPosition = 0;
 		while($row = mysql_fetch_array($result, MYSQL_NUM))
 		{
 			// get current position
@@ -39,7 +41,7 @@
 				}
 				if($row[4] == 5)
 				{
-					printf('<li class="dataTable"><a href="dataTable.php?appID=%s&appPartID=%s" target="detail">%s</a>', $row[0], $row[3], $row[5]);
+					printf('<li class="dataTable"><a href="dataTable.php?appID=%s&appPartID=%s" target="detail">%s</a></li></ol>', $row[0], $row[3], $row[5]);
 				}
 			}
 			else 
@@ -47,7 +49,14 @@
 				// if current position is less than the last position then we've moved up a level and need to close the ordered list
 				if($currentPosition < $lastPosition)
 				{
-					printf('</li></ol>');
+					if($lastPosition == 3)
+					{
+						printf('</li><li>');
+					}
+					else 
+					{
+						printf('</li></ol>');
+					}
 				}
 				
 				// check if this is a new app
@@ -68,14 +77,14 @@
 					
 					printf('<ol class="tree">');
 					printf('<li>');
-					printf('<label for="%s" class="application"><a href="ApplicationDetail.php?appID=%s" target="detail">%s</a></label> <input type="checkbox" id="%s" />', $row[5], $row[0], $row[5], $row[5]);
+					printf('<label for="%s" class="application"><a href="ApplicationDetail.php?AppID=%s" target="detail">%s</a></label> <input type="checkbox" id="%s" />', $row[5], $row[0], $row[5], $row[5]);
 					printf('<ol>');
 					printf('<li>');
 				}
 				// check if this is a AppPart
 				if($row[4] == 2)
 				{
-					printf('<label for="%s" class="appPart"><a href="AppPartDetail.php?appID=%s&appPartID=%s" target="detail">%s</a></label> <input type="checkbox" id="%s" />', $row[5], $row[0], $row[3], $row[5], $row[5]);
+					printf('<label for="%s" class="appPart"><a href="AppPartDetail.php?appID=%s&AppPartID=%s" target="detail">%s</a></label> <input type="checkbox" id="%s" />', $row[5], $row[0], $row[3], $row[5], $row[5]);
 					printf('<ol>');
 					printf('<li>');
 				}

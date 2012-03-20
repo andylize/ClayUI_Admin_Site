@@ -4,6 +4,15 @@
 	font:12pt verdana, sans-serif;
 	color:#000; 
 }
+.containerHeader
+{
+	background-color: #707070; 
+	border-style: solid; 
+	border-width: 1px; 
+	padding-top: 5px; 
+	padding-bottom: 5px;
+	padding-left: 5px;
+}
 
 /* CSS Tree menu styles */
 ol.tree
