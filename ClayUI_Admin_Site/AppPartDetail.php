@@ -9,18 +9,20 @@ $username = $_SERVER['CLAYUI_USER'];
 $password = $_SERVER['CLAYUI_PASS'];
 $database = $_SERVER['CLAYUI_DB'];
 
-if(isset($_GET['AppID']) && intval($_GET['AppID'])) // this is a get
+if((isset($_GET['AppID']) && intval($_GET['AppID'])) && (isset($_GET['AppPartID']) && intval($_GET['AppPartID']))) // this is a get
 {
 	$appID = intval($_GET['AppID']);
-	$sql = sprintf("CALL uspGetApplicationDetails(%d);", intval($appID));
+	$appPartID = intval($_GET['AppPartID']);
+	$sql = sprintf("CALL uspGetAppPartDetails(%d, %d);", intval($appID), intval($appPartID));
 	mysql_connect(localhost, $username, $password);
 	mysql_select_db($database) or die("Unable to select database");
 	$result = mysql_query($sql);
 	while ($row = mysql_fetch_array($result, MYSQL_NUM))
 	{
 		$appID = $row[0];
-		$appName = $row[1];
-		$description = $row[2];
+		$appPartID = $row[1];
+		$appName = $row[2];
+		$description = $row[3];
 	}
 	$saved = "";
 }
@@ -28,11 +30,12 @@ if(isset($_GET['AppID']) && intval($_GET['AppID'])) // this is a get
 if(isset($_POST['submit'])) // this is a post
 {
 	$appID = $_POST['appID'];
+	$appPartID = $_POST['appPartID'];
 	$appName = $_POST['appName'];
 	$description = $_POST['description'];
 	mysql_connect(localhost, $username, $password);
 	mysql_select_db($database) or die("Unable to select database");
-	$sql = sprintf("CALL uspUpdateApplication(%d, '%s', '%s');", intval($appID), mysql_escape_string($appName), mysql_escape_string($description));
+	$sql = sprintf("CALL uspUpdateAppPart(%d, %d, '%s', '%s');", intval($appID), intval($appPartID), mysql_escape_string($appName), mysql_escape_string($description));
 	mysql_query($sql);
 	$saved = "saved";
 }
@@ -40,10 +43,11 @@ if(isset($_POST['submit'])) // this is a post
 ?>
 </head>
 <body class="menu">
-<div class="containerHeader">Application Details</div>
+<div class="containerHeader">AppPart Details</div>
 <div style="padding-top: 15px">
 <form  method="post" action="<?php echo htmlentities($_SERVER['PHP_SELF']); ?>">
 <input type="hidden" name="appID" value="<?php echo($appID);?>">
+<input type="hidden" name="appPartID" value="<?php echo($appPartID);?>">
 	<table>
 		<tr>
 			<td>Name:</td><td><input style="font-family: monospace; width: 500px; border: thin;" type="text" name="appName" value="<?php echo($appName);?>"></td>

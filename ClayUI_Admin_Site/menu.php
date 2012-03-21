@@ -37,11 +37,11 @@
 				
 				if($row[4] == 4)
 				{
-					printf('<li class="element"><a href="element.php?appID=%s&appPartID=%s&elementID=%s" target="detail">%s</a></li>', $row[0], $row[3], $row[6], $row[5]);
+					printf('<li class="element"><a href="element.php?AppID=%s&AppPartID=%s&ElementID=%s" target="detail">%s</a></li>', $row[0], $row[3], $row[6], $row[5]);
 				}
 				if($row[4] == 5)
 				{
-					printf('<li class="dataTable"><a href="dataTable.php?appID=%s&appPartID=%s" target="detail">%s</a></li></ol>', $row[0], $row[3], $row[5]);
+					printf('<li class="dataTable"><a href="dataTable.php?AppID=%s&AppPartID=%s" target="detail">%s</a></li></ol>', $row[0], $row[3], $row[5]);
 				}
 			}
 			else 
@@ -84,14 +84,14 @@
 				// check if this is a AppPart
 				if($row[4] == 2)
 				{
-					printf('<label for="%s" class="appPart"><a href="AppPartDetail.php?appID=%s&AppPartID=%s" target="detail">%s</a></label> <input type="checkbox" id="%s" />', $row[5], $row[0], $row[3], $row[5], $row[5]);
+					printf('<label for="%s" class="appPart"><a href="AppPartDetail.php?AppID=%s&AppPartID=%s" target="detail">%s</a></label> <input type="checkbox" id="%s" />', $row[5], $row[0], $row[3], $row[5], $row[5]);
 					printf('<ol>');
 					printf('<li>');
 				}
 				// check if this is an Elements
 				if($row[4] == 3)
 				{
-					printf('<label for="%s" class="elements"><a href="ElementsDetail.php?appID=%s&appPartID=%s" target="detail">%s</a></label> <input type="checkbox" id="%s%s" />', $row[5], $row[0], $row[3], $row[5], $row[5], $row[3]);
+					printf('<label for="%s" class="elements"><a href="ElementsDetail.php?AppID=%s&appPartID=%s" target="detail">%s</a></label> <input type="checkbox" id="%s%s" />', $row[5], $row[0], $row[3], $row[5], $row[5], $row[3]);
 					printf('<ol>');
 				}
 			}			
