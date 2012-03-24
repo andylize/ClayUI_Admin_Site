@@ -17,7 +17,7 @@
 ?>
 </head>
 <body class="menu">
-<div class="containerHeader">Application Tree&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="applicationDetail.php" target="detail">Add New..></a></div>
+<div class="containerHeader">Application Tree&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="button" value="Reload Menu" onClick="window.location.reload()"></div>
 	<?php
 		$currentPosition = 1;
 		$lastPosition = 0;
@@ -73,6 +73,11 @@
 						{
 							printf('</ol>');
 						}
+					}
+					
+					if($lastPosition == 1) // this is another Application
+					{
+						printf('</li></ol>');
 					}
 					
 					printf('<ol class="tree">');

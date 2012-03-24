@@ -43,7 +43,8 @@ if(isset($_POST['submit'])) // this is a post
 ?>
 </head>
 <body class="menu">
-<div class="containerHeader">AppPart Details</div>
+<div class="containerHeader">AppPart Details
+</div>
 <div style="padding-top: 15px">
 <form  method="post" action="<?php echo htmlentities($_SERVER['PHP_SELF']); ?>">
 <input type="hidden" name="appID" value="<?php echo($appID);?>">
