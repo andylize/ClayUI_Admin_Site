@@ -59,6 +59,12 @@
 					}
 				}
 				
+				// if current posistion is same as last posistion, then we need to close the lists
+				if($currentPosition == $lastPosition)
+				{
+					printf('</li></ol>');
+				}
+				
 				// check if this is a new app
 				if($row[4] == 1)
 				{
@@ -96,7 +102,7 @@
 				// check if this is an Elements
 				if($row[4] == 3)
 				{
-					printf('<label for="%s" class="elements"><a href="ElementsDetail.php?AppID=%s&appPartID=%s" target="detail">%s</a></label> <input type="checkbox" id="%s%s" />', $row[5], $row[0], $row[3], $row[5], $row[5], $row[3]);
+					printf('<label for="%s" class="elements"><a href="ElementsDetail.php?AppID=%s&AppPartID=%s" target="detail">%s</a></label> <input type="checkbox" id="%s%s" />', $row[5], $row[0], $row[3], $row[5], $row[5], $row[3]);
 					printf('<ol>');
 				}
 			}			

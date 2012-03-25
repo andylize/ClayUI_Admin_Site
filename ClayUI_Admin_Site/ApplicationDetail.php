@@ -48,15 +48,31 @@ if(isset($_POST['addNewApp'])) // this is a
 		$appID = $row[0];
 		$appName = $row[1];
 		$description = $row[2];
+	}	
+}
+
+if(isset($_POST['addNewAppPart']))
+{
+	$appID = $_POST['appID'];
+	mysql_connect(localhost, $username, $password);
+	mysql_select_db($database) or die("Unable to select database");
+	$sql = sprintf("CALL uspAddAppPart(%d);", intval($appID));
+	$result = mysql_query($sql);
+	while($row = mysql_fetch_array($result, MYSQL_NUM))
+	{
+		$appPartID = $row[1];
 	}
-	$saved = "";	
+	$redirect = sprintf("Location: AppPartDetail.php?AppID=%d&AppPartID=%d", intval($appID), intval($appPartID));
+	header($redirect);
 }
 	
 ?>
 </head>
 <body class="menu">
-<div class="containerHeader">Application Details&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<div class="containerHeader" style="border-left: none;">
 	<form method="post" action="<?php echo htmlentities($_SERVER['PHP_SELF']); ?>">
+		<input type="hidden" name="appID" value="<?php echo($appID);?>">
+		Application Details&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 		<input type="submit" value="Add New Application" name="addNewApp">&nbsp;
 		<input type="submit" value="Add New AppPart" name="addNewAppPart">
 	</form>
