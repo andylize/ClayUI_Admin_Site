@@ -3,6 +3,32 @@
 <html lang="en">
 <head>
 	<link href="./stylesheets/admin.css" media="screen" rel="stylesheet" type="text/css" />
+	<style type="text/css">
+		table
+		{
+			border-collapse: collapse;
+		}
+		table, th, td
+		{
+			border: 1px solid black;
+		}
+		thead
+		{
+			background-color: black;
+		 	color: white;
+			font: 10pt verdana, sans-serif;
+			font-weight: bold;
+			text-align: center;
+		}
+		tbody
+		{
+			font: 10pt verdana, sans-serif;
+		}
+		tr.alt
+		{
+			background-color: #B5B5B5;
+		}
+	</style>
 <?php 
 
 $username = $_SERVER['CLAYUI_USER'];
@@ -38,17 +64,31 @@ if(isset($_POST['addNewAppPart']))
 function getHtmlTable($result){
 	// receive a record set and print
 	// it into an html table
-	$out = '<table>';
-	for($i = 0; $i < mysql_num_fields($result); $i++){
+	$isodd = true;
+	
+	$out = "<table><thead>";
+	for($i = 0; $i < mysql_num_fields($result); $i++)
+	{
 		$aux = mysql_field_name($result, $i);
 		$out .= "<th>".$aux."</th>";
 	}
-	while ($linea = mysql_fetch_array($result, MYSQL_ASSOC)) {
-		$out .= "<tr>";
+	$out .= "</thead><tbody>";
+	while ($linea = mysql_fetch_array($result, MYSQL_ASSOC)) 
+	{
+		if ($isodd == true)
+		{
+			$out .= "<tr>";
+			$isodd = false;
+		}
+		else 
+		{
+			$out .= '<tr class="alt">';
+			$isodd = true;
+		}
 		foreach ($linea as $valor_col) $out .= '<td>'.$valor_col.'</td>';
 		$out .= "</tr>";
 	}
-	$out .= "</table>";
+	$out .= "</tbody></table>";
 	return $out;
 }
 	
@@ -63,7 +103,7 @@ function getHtmlTable($result){
 		<input type="submit" value="Add New Element" name="addNewElement">
 	</form>
 </div>
-<div style="padding-top: 15px">
+<div style="padding-top: 15px; padding-left: 5px;">
 <?php 
 	echo getHtmlTable($result);
 ?>
