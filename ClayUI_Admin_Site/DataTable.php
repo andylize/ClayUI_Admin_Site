@@ -39,26 +39,10 @@ if((isset($_GET['AppID']) && intval($_GET['AppID'])) && (isset($_GET['AppPartID'
 {
 	$appID = intval($_GET['AppID']);
 	$appPartID = intval($_GET['AppPartID']);
-	$sql = sprintf("CALL uspGetElementDataTable(%d, %d);", intval($appID), intval($appPartID));
+	$sql = sprintf("CALL uspGetAppPartDataTable(%d, %d);", intval($appID), intval($appPartID));
 	mysql_connect(localhost, $username, $password);
 	mysql_select_db($database) or die("Unable to select database");
 	$result = mysql_query($sql);
-}
-
-// TODO Add new Element
-if(isset($_POST['addNewElement']))
-{
-	$appID = $_POST['appID'];
-	mysql_connect(localhost, $username, $password);
-	mysql_select_db($database) or die("Unable to select database");
-	$sql = sprintf("CALL uspAddAppPart(%d);", intval($appID));
-	$result = mysql_query($sql);
-	while($row = mysql_fetch_array($result, MYSQL_NUM))
-	{
-		$appPartID = $row[1];
-	}
-	$redirect = sprintf("Location: AppPartDetail.php?AppID=%d&AppPartID=%d", intval($appID), intval($appPartID));
-	header($redirect);
 }
 
 function getHtmlTable($result){
@@ -95,14 +79,7 @@ function getHtmlTable($result){
 ?>
 </head>
 <body class="menu">
-<div class="containerHeader" style="border-left: none;">
-	<form method="post" action="<?php echo htmlentities($_SERVER['PHP_SELF']); ?>">
-		<input type="hidden" name="appID" value="<?php echo($appID);?>">
-		<input type="hidden" name="appPartID" value="<?php echo($appPartID);?>">
-		Elements&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-		<input type="submit" value="Add New Element" name="addNewElement">
-	</form>
-</div>
+<div class="containerHeader" style="border-left: none;">Data Table</div>
 <div style="padding-top: 15px; padding-left: 5px;">
 <?php 
 	echo getHtmlTable($result);
