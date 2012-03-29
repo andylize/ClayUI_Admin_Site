@@ -37,7 +37,7 @@
 				
 				if($row[4] == 4)
 				{
-					printf('<li class="element"><a href="Element.php?AppID=%s&AppPartID=%s&ElementID=%s" target="detail">%s</a></li>', $row[0], $row[3], $row[6], $row[5]);
+					printf('<li class="element"><a href="ElementDetail.php?AppID=%s&AppPartID=%s&ElementID=%s" target="detail">%s</a></li>', $row[0], $row[3], $row[6], $row[5]);
 				}
 				if($row[4] == 5)
 				{
