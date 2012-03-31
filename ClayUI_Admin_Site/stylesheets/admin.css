@@ -21,6 +21,28 @@
 	
 }
 
+.popUpContainerOuter
+{
+	visibility: hidden; 
+	background-color: #444444; 
+	position: absolute; 
+	left: 4px; 
+	top: 5px; 
+	z-index: 1; 
+	height: 435px; 
+	width: 650px; 
+}
+
+.popUpContainerInner
+{
+	background-color: #EBEBEB; 
+	position: absolute; 
+	left: 2px; 
+	top: 3px; 
+	height: 429px; 
+	width: 646px;
+}
+
 /* CSS Tree menu styles */
 ol.tree
 {

@@ -3,6 +3,45 @@
 <html lang="en">
 <head>
 	<link href="./stylesheets/admin.css" media="screen" rel="stylesheet" type="text/css" />
+<script language=javascript type='text/javascript'> 
+	function hideDiv() 
+	{ 
+		if (document.getElementById) 
+		{ // DOM3 = IE5, NS6 
+			document.getElementById('hideShow').style.visibility = 'hidden'; 
+		} 
+		else 
+		{ 
+			if (document.layers) 
+			{ // Netscape 4 
+				document.hideShow.visibility = 'hidden'; 
+			} 
+			else 
+			{ // IE 4 
+				document.all.hideShow.style.visibility = 'hidden'; 
+			}
+		} 
+	}
+
+	function showDiv() 
+	{ 
+		if (document.getElementById) 
+		{ // DOM3 = IE5, NS6 
+			document.getElementById('hideShow').style.visibility = 'visible'; 
+		} 
+		else 
+		{ 
+			if (document.layers) 
+			{ // Netscape 4 
+				document.hideShow.visibility = 'visible'; 
+			} 
+			else 
+			{ // IE 4 
+				document.all.hideShow.style.visibility = 'visible'; 
+			} 
+		} 
+	} 
+</script>
 <?php 
 
 $username = $_SERVER['CLAYUI_USER'];
@@ -14,27 +53,44 @@ if((isset($_GET['AppID']) && intval($_GET['AppID'])) && (isset($_GET['AppPartID'
 	$appID = intval($_GET['AppID']);
 	$appPartID = intval($_GET['AppPartID']);
 	$elementID = intval($_GET['ElementID']);
-	$sql = sprintf("CALL uspGetElement(%d, %d, %d);", intval($appID), intval($appPartID), intval($elementID));
-	mysql_connect(localhost, $username, $password);
-	mysql_select_db($database) or die("Unable to select database");
-	$result = mysql_query($sql);
-	while ($row = mysql_fetch_array($result, MYSQL_NUM))
+	$db = new mysqli('localhost', $username, $password, $database);
+	
+	if(mysqli_connect_errno())
 	{
-		$appID = $row[0];
-		$appPartID = $row[1];
-		$elementID = $row[2];
-		$elementName = $row[3];
-		$elementType = $row[4];
-		$elementDescr = $row[5];
-		$elementLabel = $row[6];
-		$isStored = $row[7];
-		$dataType = $row[8];
-		$dataLength = $row[9];
-		$listOrder = $row[10];
-		$isEnabled = $row[11];
-		
+		echo mysqli_connect_error();
 	}
+	$sql = sprintf("CALL uspGetElement(%d, %d, %d)", intval($appID), intval($appPartID), intval($elementID));
+	
+	$result = $db->query($sql);
+	if ($result)
+	{
+		while($row = $result->fetch_array()) 
+		{
+			$appID = $row[0];
+			$appPartID = $row[1];
+			$elementID = $row[2];
+			$elementName = $row[3];
+			$elementType = $row[4];
+			$elementDescr = $row[5];
+			$elementLabel = $row[6];
+			$isStored = $row[7];
+			$dataType = $row[8];
+			$dataLength = $row[9];
+			$listOrder = $row[10];
+			$isEnabled = $row[11];
+		}
+		$result->close();
+		$db->next_result();
+	}
+	else
+	{
+		echo($db->error);
+	}
+	
 	$saved = "";
+	
+	
+	
 }
 
 
@@ -57,30 +113,88 @@ if((isset($_GET['AppID']) && intval($_GET['AppID'])) && (isset($_GET['AppPartID'
 <input type="hidden" name="elementID" value="<?php echo($elementID);?>">
 	<table>
 		<tr>
-			<td>Name:</td><td><input style="font-family: monospace; width: 500px; border: thin;" type="text" name="appName" value="<?php echo($elementName);?>"></td>
+			<td>Name:</td><td colspan="3"><input style="width: 504px; font-family: monospace; border: thin;" type="text" name="elementName" value="<?php echo($elementName);?>"></td>
 		</tr>
 		<tr>
-			<td valign="top">Description:</td><td style="vertical-align: text-top;"><textarea name="description" style="width: 500px; height: 250px; border: thin;" rows="10" cols="80"><?php echo($elementDescr);?></textarea></td>
+			<td valign="top">Description:</td><td colspan="3" style="vertical-align: text-top;"><textarea name="elementDescr" style="width: 500px; height: 150px; border: thin;" rows="10" cols="80"><?php echo($elementDescr);?></textarea></td>
 		</tr>
 		<tr>
 			<td>Element Type:</td>
 			<td>
-			<
 				<select name="elementType">
-					<option value="0" selected>(please select:)</option>
-					<option value="1">one</option>
-					<option value="2">two</option>
+				<?php
+					// get the element type options
+					$sql = sprintf("CALL uspGetElementTypes()");
+					$result = $db->query($sql);
+					while ($row = $result->fetch_array())
+					{
+						if($elementType == $row[0])
+						{
+							printf('<option value="%d" selected>%s</option>', $row[0], $row[1]);
+						}
+						else 
+						{
+							printf('<option value="%d">%s</option>', $row[0], $row[1]);
+						}
+					}
+					$result->close();
+					$db->next_result();
+				?>					
 				</select>
 			</td>
+			<td><input type="button" name="editOptions" value="Click" onClick="showDiv()"></td>
+			<td></td>
 		</tr>
 		<tr>
-			<td><span style="color: red; font-style: italic;"><?php echo($saved);?></span></td><td align="right"><input type="submit" value="Save" name="submit"></td>
+			<td>Label:</td><td colspan="3"><input style="width: 500px; font-family: monospace; border: thin;" type="text" name="elementLabel" value="<?php echo($elementLabel);?>"></td>
+		</tr>
+		<tr>
+			<td>Enabled:</td>
+			<td><input type="checkbox" name="isEnabled" value="1" <?php if($isEnabled ==1){ echo("checked");}?>></td>
+			<td>Data Stored:</td>
+			<td><input type="checkbox" name="isStored" value="1" <?php if($isStored == 1){ echo("checked");}?>></td>
+		</tr>
+		<tr>
+			<td>Data Type:</td>
+			<td>
+				<select name="dataType">
+				<?php 
+					// get data type options
+					$sql = sprintf("CALL uspGetDataTypes()");
+					$result = $db->query($sql);
+					while ($row = $result->fetch_array())
+					{
+						if($dataType == $row[0])
+						{
+							printf('<option value="%d" selected>%s</option>', $row[0], $row[1]);
+						}
+						else 
+						{
+							printf('<option value="%d">%s</option>', $row[0], $row[1]);
+						}
+					}
+					$result->close();
+				?>
+				</select>
+			</td>
+			<td>Length:</td><td><input style="font-family: monospace; border: thin;" type="text" name="dataLength" value="<?php echo($dataLength);?>"></td>
+		</tr>
+		<tr>
+			<td>List Order:</td><td><input style="font-family: monospace; border: thin;" type="text" name="listOrder" value="<?php echo($listOrder);?>"></td><td colspan="2"></td>
+		</tr>
+		<tr>
+			<td colspan="1"><span style="color: red; font-style: italic;"><?php echo($saved);?></span></td><td colspan="2"></td><td align="right"><input type="submit" value="Save" name="submit"></td>
 		</tr>
 	</table>
 </form>
 </div>
+<div id="hideShow" class="popUpContainerOuter">
+	<div class="popUpContainerInner">
+	<input type="button" name="saveOptions" value="Click" onClick="hideDiv()">
+	</div>
+</div>
 <?php 
-	mysql_close();
+	$db->close();
 ?>
 </body>
 </html>
