@@ -23,7 +23,6 @@
 
 .popUpContainerOuter
 {
-	visibility: hidden; 
 	background-color: #444444; 
 	position: absolute; 
 	left: 4px; 
@@ -41,6 +40,31 @@
 	top: 3px; 
 	height: 429px; 
 	width: 646px;
+}
+.popUpTable
+{
+	border-collapse: collapse;
+	border: 1px solid black;
+}
+.popUpThTd
+{
+	border: 1px solid black;
+}
+.popUpThead
+{
+	background-color: black;
+ 	color: white;
+	font: 10pt verdana, sans-serif;
+	font-weight: bold;
+	text-align: center;
+}
+.popUpTbody
+{
+	font: 10pt verdana, sans-serif;
+}
+.popUpTrAlt
+{
+	background-color: #B5B5B5;
 }
 
 /* CSS Tree menu styles */

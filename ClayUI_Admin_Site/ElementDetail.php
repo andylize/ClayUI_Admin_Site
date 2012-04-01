@@ -3,6 +3,7 @@
 <html lang="en">
 <head>
 	<link href="./stylesheets/admin.css" media="screen" rel="stylesheet" type="text/css" />
+	
 <script language=javascript type='text/javascript'> 
 	function hideDiv() 
 	{ 
@@ -48,6 +49,8 @@ $username = $_SERVER['CLAYUI_USER'];
 $password = $_SERVER['CLAYUI_PASS'];
 $database = $_SERVER['CLAYUI_DB'];
 
+$optionVisibilty = "hidden";
+
 if((isset($_GET['AppID']) && intval($_GET['AppID'])) && (isset($_GET['AppPartID']) && intval($_GET['AppPartID'])) && (isset($_GET['ElementID']) && intval($_GET['ElementID']))) // this is a get
 {
 	$appID = intval($_GET['AppID']);
@@ -87,13 +90,52 @@ if((isset($_GET['AppID']) && intval($_GET['AppID'])) && (isset($_GET['AppPartID'
 		echo($db->error);
 	}
 	
-	$saved = "";
-	
-	
-	
+	$saved = "";	
 }
 
-
+// save element options
+if (isset($_POST['addOptions']))
+{
+	$appID = $_POST['appID'];
+	$appPartID = $_POST['appPartID'];
+	$elementID = $_POST['elementID'];
+	$newElementOptionValue = $_POST['newElementOptionValue'];
+	$newElementOptionDescr = $_POST['newElementOptionDescr'];
+	$optionVisibilty = "visible"; // keep form visible
+	
+	$db = new mysqli('localhost', $username, $password, $database);
+	
+	if(mysqli_connect_errno())
+	{
+		echo mysqli_connect_error();
+	}
+	$sql = sprintf("CALL uspAddElementOption(%d, %d, %d, '%s', '%s')", intval($appID), intval($appPartID), intval($elementID), strval($newElementOptionValue), strval($newElementOptionDescr));
+	$result = $db->query($sql);
+	if ($result)
+	{
+		while($row = $result->fetch_array()) 
+		{
+			$appID = $row[0];
+			$appPartID = $row[1];
+			$elementID = $row[2];
+			$elementName = $row[3];
+			$elementType = $row[4];
+			$elementDescr = $row[5];
+			$elementLabel = $row[6];
+			$isStored = $row[7];
+			$dataType = $row[8];
+			$dataLength = $row[9];
+			$listOrder = $row[10];
+			$isEnabled = $row[11];
+		}
+		$result->close();
+		$db->next_result();
+	}
+	else
+	{
+		echo($db->error);
+	}
+}
 ?>
 </head>
 <body class="menu">
@@ -174,6 +216,7 @@ if((isset($_GET['AppID']) && intval($_GET['AppID'])) && (isset($_GET['AppPartID'
 						}
 					}
 					$result->close();
+					$db->next_result();
 				?>
 				</select>
 			</td>
@@ -188,9 +231,65 @@ if((isset($_GET['AppID']) && intval($_GET['AppID'])) && (isset($_GET['AppPartID'
 	</table>
 </form>
 </div>
-<div id="hideShow" class="popUpContainerOuter">
+<div id="hideShow" class="popUpContainerOuter" style="visibility: <?php echo $optionVisibilty; ?>;">
 	<div class="popUpContainerInner">
-	<input type="button" name="saveOptions" value="Click" onClick="hideDiv()">
+	<div style="padding-left: 10px; padding-top: 10px;"><span style="font: bold;">Add Element Options</span>
+	<form method="post" action="<?php echo htmlentities($_SERVER['PHP_SELF']); ?>">
+	<input type="hidden" name="appID" value="<?php echo($appID);?>">
+	<input type="hidden" name="appPartID" value="<?php echo($appPartID);?>">
+	<input type="hidden" name="elementID" value="<?php echo($elementID);?>">
+		<table>
+			<tr>
+				<td>Value:</td>
+				<td><input style="font-family: monospace; border: thin;" type="text" name="newElementOptionValue" value=""></td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>Description:</td>
+				<td><input style="font-family: monospace; border: thin;" type="text" name="newElementOptionDescr" value=""></td>
+				<td><input type="submit" name="addOptions" value="Add" onClick="hideDiv()"></td>
+			</tr>
+		</table>
+	</form>
+	<p></p>
+	<hr />
+	<span style="font: bold;">Existing Options</span>
+	<?php 
+		// get data for element options
+		$sql = sprintf("CALL uspGetElementOptions(%d, %d, %d)", intval($appID), intval($appPartID), intval($elementID));
+		$result = $db->query($sql);
+		printf('<table class="popUpTable"><thead class="popUpThead">');
+				
+		$fields = $result->fetch_fields(); // get field collection
+		foreach($fields as $field)
+		{
+			printf('<th class="popUpThTd">%s</th>', strval($field->name));
+		}
+		
+		$isodd = true; // for alternate lines
+		printf('</thead><tbody class="popUpTbody">');
+		while($row = $result->fetch_array())
+		{
+			if ($isodd == true)
+			{
+				printf('<tr>');
+				$isodd = false;
+			}
+			else
+			{
+				printf('<tr class="popUpTrAlt">');
+				$isodd = true;
+			}
+			printf('<td class="popUpThTd">%d</td><td class="popUpThTd">%s</td>', strval($row[0]), strval($row[1]));
+			printf('</tr>');
+		}
+		printf('</tbody></table>');
+		$result->close();
+		$db->next_result();
+		
+	?>
+	</div>
+	<input type="button" name="closeOptions" value="Close" onClick="hideDiv()" align="right">
 	</div>
 </div>
 <?php 

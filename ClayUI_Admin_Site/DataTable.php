@@ -57,7 +57,7 @@ function getHtmlTable($result){
 		$out .= "<th>".$aux."</th>";
 	}
 	$out .= "</thead><tbody>";
-	while ($linea = mysql_fetch_array($result, MYSQL_ASSOC)) 
+	while ($row = mysql_fetch_array($result, MYSQL_ASSOC)) 
 	{
 		if ($isodd == true)
 		{
@@ -69,7 +69,7 @@ function getHtmlTable($result){
 			$out .= '<tr class="alt">';
 			$isodd = true;
 		}
-		foreach ($linea as $valor_col) $out .= '<td>'.$valor_col.'</td>';
+		foreach ($row as $column) $out .= '<td>'.$column.'</td>';
 		$out .= "</tr>";
 	}
 	$out .= "</tbody></table>";
