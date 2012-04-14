@@ -45,19 +45,19 @@ if((isset($_GET['AppID']) && intval($_GET['AppID'])) && (isset($_GET['AppPartID'
 	$result = mysql_query($sql);
 }
 
-// TODO Add new Element
 if(isset($_POST['addNewElement']))
 {
 	$appID = $_POST['appID'];
+	$appPartID = $_POST['appPartID'];
 	mysql_connect(localhost, $username, $password);
 	mysql_select_db($database) or die("Unable to select database");
-	$sql = sprintf("CALL uspAddAppPart(%d);", intval($appID));
+	$sql = sprintf("CALL uspAddNewElement(%d, %d);", intval($appID), intval($appPartID));
 	$result = mysql_query($sql);
 	while($row = mysql_fetch_array($result, MYSQL_NUM))
 	{
-		$appPartID = $row[1];
+		$elementID = $row[2];
 	}
-	$redirect = sprintf("Location: AppPartDetail.php?AppID=%d&AppPartID=%d", intval($appID), intval($appPartID));
+	$redirect = sprintf("Location: ElementDetail.php?AppID=%d&AppPartID=%d&ElementID=%d", intval($appID), intval($appPartID), intval($elementID));
 	header($redirect);
 }
 
@@ -73,7 +73,7 @@ function getHtmlTable($result){
 		$out .= "<th>".$aux."</th>";
 	}
 	$out .= "</thead><tbody>";
-	while ($linea = mysql_fetch_array($result, MYSQL_ASSOC)) 
+	while ($row = mysql_fetch_array($result, MYSQL_ASSOC)) 
 	{
 		if ($isodd == true)
 		{
@@ -85,7 +85,7 @@ function getHtmlTable($result){
 			$out .= '<tr class="alt">';
 			$isodd = true;
 		}
-		foreach ($linea as $valor_col) $out .= '<td>'.$valor_col.'</td>';
+		foreach ($row as $column) $out .= '<td>'.$column.'</td>';
 		$out .= "</tr>";
 	}
 	$out .= "</tbody></table>";

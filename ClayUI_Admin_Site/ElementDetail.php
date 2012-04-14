@@ -51,6 +51,7 @@ $database = $_SERVER['CLAYUI_DB'];
 
 $optionVisibilty = "hidden";
 
+// default option when page is loaded
 if((isset($_GET['AppID']) && intval($_GET['AppID'])) && (isset($_GET['AppPartID']) && intval($_GET['AppPartID'])) && (isset($_GET['ElementID']) && intval($_GET['ElementID']))) // this is a get
 {
 	$appID = intval($_GET['AppID']);
@@ -91,6 +92,102 @@ if((isset($_GET['AppID']) && intval($_GET['AppID'])) && (isset($_GET['AppPartID'
 	}
 	
 	$saved = "";	
+}
+
+// add new elemnet
+if(isset($_POST['addNewElement']))
+{
+	$appID = $_POST['appID'];
+	$appPartID = $_POST['appPartID'];
+	
+	$db = new mysqli('localhost', $username, $password, $database);
+	
+	if(mysqli_connect_errno())
+	{
+		echo mysqli_connect_error();
+	}
+	$sql = sprintf("CALL uspAddNewElement(%d, %d);", intval($appID), intval($appPartID));
+	$result = $db->query($sql);
+	if ($result)
+	{
+		while($row = $result->fetch_array())
+		{
+			$elementID = $row[2];
+		}
+		$result->close();
+		$db->next_result();
+		
+		$redirect = sprintf("Location: ElementDetail.php?AppID=%d&AppPartID=%d&ElementID=%d", intval($appID), intval($appPartID), intval($elementID));
+		header($redirect);
+	}
+	else
+	{
+		echo($db->error);
+	}
+}
+
+// save element details
+if (isset($_POST['saveDetails']))
+{
+	$appID = $_POST['appID'];
+	$appPartID = $_POST['appPartID'];
+	$elementID = $_POST['elementID'];
+	$elementName = $_POST['elementName'];
+	$elementType = $_POST['elementType'];
+	$elementDescr = $_POST['elementDescr'];
+	$elementLabel = $_POST['elementLabel'];
+	$isStored = $_POST['isStored'];
+	$dataType = $_POST['dataType'];
+	$dataLength = $_POST['dataLength'];
+	$listOrder = $_POST['listOrder'];
+	$isEnabled = $_POST['isEnabled'];
+	
+	$db = new mysqli('localhost', $username, $password, $database);
+	
+	if(mysqli_connect_errno())
+	{
+		echo mysqli_connect_error();
+	}
+	$sql = sprintf("CALL uspUpdateElement(%d, %d, %d, '%s', %d, %d, '%s', '%s', %d, %d, %d, %d)", 
+				intval($appID), 
+				intval($appPartID), 
+				intval($elementID), 
+				strval($elementName),
+				intval($elementType),
+				intval($dataType),
+			 	strval($elementLabel),
+				strval($elementDescr),
+				intval($isStored),
+				intval($listOrder),
+				intval($isEnabled),
+				intval($dataLength));
+	$result = $db->query($sql);
+	if ($result)
+	{
+		while($row = $result->fetch_array())
+		{
+			$appID = $row[0];
+			$appPartID = $row[1];
+			$elementID = $row[2];
+			$elementName = $row[3];
+			$elementType = $row[4];
+			$elementDescr = $row[5];
+			$elementLabel = $row[6];
+			$isStored = $row[7];
+			$dataType = $row[8];
+			$dataLength = $row[9];
+			$listOrder = $row[10];
+			$isEnabled = $row[11];
+		}
+		$result->close();
+		$db->next_result();
+	}
+	else
+	{
+		echo($db->error);
+	}
+	
+	$saved = "saved";
 }
 
 // save element options
@@ -184,7 +281,7 @@ if (isset($_POST['addOptions']))
 				?>					
 				</select>
 			</td>
-			<td><input type="button" name="editOptions" value="Click" onClick="showDiv()"></td>
+			<td><input type="button" name="editOptions" value="Edit Element Options" onClick="showDiv()"></td>
 			<td></td>
 		</tr>
 		<tr>
@@ -192,9 +289,9 @@ if (isset($_POST['addOptions']))
 		</tr>
 		<tr>
 			<td>Enabled:</td>
-			<td><input type="checkbox" name="isEnabled" value="1" <?php if($isEnabled ==1){ echo("checked");}?>></td>
+			<td><input type="checkbox" name="isEnabled" disabled="disabled" value="1" <?php if($isEnabled ==1){ echo("checked");}?>></td>
 			<td>Data Stored:</td>
-			<td><input type="checkbox" name="isStored" value="1" <?php if($isStored == 1){ echo("checked");}?>></td>
+			<td><input type="checkbox" name="isStored" disabled="disabled" value="1" <?php if($isStored == 1){ echo("checked");}?>></td>
 		</tr>
 		<tr>
 			<td>Data Type:</td>
@@ -226,7 +323,7 @@ if (isset($_POST['addOptions']))
 			<td>List Order:</td><td><input style="font-family: monospace; border: thin;" type="text" name="listOrder" value="<?php echo($listOrder);?>"></td><td colspan="2"></td>
 		</tr>
 		<tr>
-			<td colspan="1"><span style="color: red; font-style: italic;"><?php echo($saved);?></span></td><td colspan="2"></td><td align="right"><input type="submit" value="Save" name="submit"></td>
+			<td colspan="1"><span style="color: red; font-style: italic;"><?php echo($saved);?></span></td><td colspan="2"></td><td align="right"><input type="submit" value="Save" name="saveDetails"></td>
 		</tr>
 	</table>
 </form>
@@ -298,20 +395,7 @@ if (isset($_POST['addOptions']))
 </body>
 </html>
 <?php 
-/**TODO Add Save
- if(isset($_POST['submit'])) // this is a post
-{
-$appID = $_POST['appID'];
-$appPartID = $_POST['appPartID'];
-$appName = $_POST['appName'];
-$description = $_POST['description'];
-mysql_connect(localhost, $username, $password);
-mysql_select_db($database) or die("Unable to select database");
-$sql = sprintf("CALL uspUpdateAppPart(%d, %d, '%s', '%s');", intval($appID), intval($appPartID), mysql_escape_string($appName), mysql_escape_string($description));
-mysql_query($sql);
-$saved = "saved";
-}
-
+/**
 // TODO Add add new element
 if(isset($_POST['addNewElement']))
 {
