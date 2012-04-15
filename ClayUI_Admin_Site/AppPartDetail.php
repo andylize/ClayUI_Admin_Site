@@ -27,6 +27,7 @@ if((isset($_GET['AppID']) && intval($_GET['AppID'])) && (isset($_GET['AppPartID'
 	$saved = "";
 }
 
+// save app part
 if(isset($_POST['submit'])) // this is a post
 {
 	$appID = $_POST['appID'];
@@ -40,6 +41,7 @@ if(isset($_POST['submit'])) // this is a post
 	$saved = "saved";
 }
 
+// add new app part
 if(isset($_POST['addNewAppPart']))
 {
 	$appID = $_POST['appID'];
@@ -55,14 +57,28 @@ if(isset($_POST['addNewAppPart']))
 	header($redirect);
 }
 
+// delete app part
+if(isset($_POST['deleteAppPart']))
+{
+	$appID = $_POST['appID'];
+	$appPartID = $_POST['appPartID'];
+	mysql_connect(localhost, $username, $password);
+	mysql_select_db($database) or die("Unable to select database");
+	$sql = sprintf("CALL uspDeleteAppPart(%d, %d);", intval($appID), intval($appPartID));
+	mysql_query($sql);
+	$redirect = sprintf("Location: ApplicationDetail.php?AppID=%d", intval($appID));
+	header($redirect);
+}
 ?>
 </head>
 <body class="menu">
 <div class="containerHeader" style="border-left: none;">
 	<form method="post" action="<?php echo htmlentities($_SERVER['PHP_SELF']); ?>">
 		<input type="hidden" name="appID" value="<?php echo($appID);?>">
+		<input type="hidden" name="appPartID" value="<?php echo($appPartID);?>">
 		AppPart Details&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-		<input type="submit" value="Add New AppPart" name="addNewAppPart">
+		<input type="submit" value="Add New AppPart" name="addNewAppPart">&nbsp;
+		<input style="color: red;" type="submit" value="Delete AppPart" name="deleteAppPart" onClick="<?php printf("return confirm('This will delete the AppPart %s. Are you sure you want to do this?');", $appName);?>">
 	</form>
 </div>
 <div style="padding-top: 15px">

@@ -25,6 +25,7 @@ if(isset($_GET['AppID']) && intval($_GET['AppID'])) // this is a get
 	$saved = "";
 }
 
+// save app info
 if(isset($_POST['save'])) // this is a save
 {
 	$appID = $_POST['appID'];
@@ -37,6 +38,7 @@ if(isset($_POST['save'])) // this is a save
 	$saved = "saved";
 }
 
+// add new app
 if(isset($_POST['addNewApp'])) // this is a 
 {	
 	mysql_connect(localhost, $username, $password);
@@ -51,6 +53,7 @@ if(isset($_POST['addNewApp'])) // this is a
 	}	
 }
 
+// add new app part
 if(isset($_POST['addNewAppPart']))
 {
 	$appID = $_POST['appID'];
@@ -65,16 +68,28 @@ if(isset($_POST['addNewAppPart']))
 	$redirect = sprintf("Location: AppPartDetail.php?AppID=%d&AppPartID=%d", intval($appID), intval($appPartID));
 	header($redirect);
 }
-	
+
+// delete app
+if (isset($_POST['deleteApplication']))
+{
+	$appID = $_POST['appID'];mysql_connect(localhost, $username, $password);
+	mysql_select_db($database) or die("Unable to select database");
+	$sql = sprintf("CALL uspDeleteApplication(%d);", intval($appID));
+	mysql_query($sql);
+	$redirect = sprintf("Location: detail.php");
+	header($redirect);	
+}
+
 ?>
 </head>
 <body class="menu">
 <div class="containerHeader" style="border-left: none;">
 	<form method="post" action="<?php echo htmlentities($_SERVER['PHP_SELF']); ?>">
 		<input type="hidden" name="appID" value="<?php echo($appID);?>">
-		Application Details&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		Application Details&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 		<input type="submit" value="Add New Application" name="addNewApp">&nbsp;
-		<input type="submit" value="Add New AppPart" name="addNewAppPart">
+		<input type="submit" value="Add New AppPart" name="addNewAppPart">&nbsp;
+		<input style="color: red;" type="submit" value="Delete Application" name="deleteApplication" onClick="<?php printf("return confirm('This will delete the application %s. Are you sure you want to do this?');", $appName);?>">
 	</form>
 </div>
 <div style="padding-top: 15px">

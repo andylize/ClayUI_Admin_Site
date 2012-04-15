@@ -163,22 +163,7 @@ if (isset($_POST['saveDetails']))
 				intval($dataLength));
 	$result = $db->query($sql);
 	if ($result)
-	{
-		while($row = $result->fetch_array())
-		{
-			$appID = $row[0];
-			$appPartID = $row[1];
-			$elementID = $row[2];
-			$elementName = $row[3];
-			$elementType = $row[4];
-			$elementDescr = $row[5];
-			$elementLabel = $row[6];
-			$isStored = $row[7];
-			$dataType = $row[8];
-			$dataLength = $row[9];
-			$listOrder = $row[10];
-			$isEnabled = $row[11];
-		}
+	{		
 		$result->close();
 		$db->next_result();
 	}
@@ -186,7 +171,6 @@ if (isset($_POST['saveDetails']))
 	{
 		echo($db->error);
 	}
-	
 	$saved = "saved";
 }
 
@@ -233,6 +217,32 @@ if (isset($_POST['addOptions']))
 		echo($db->error);
 	}
 }
+
+// delete element
+if (isset($_POST['deleteElement']))
+{
+	$appID = $_POST['appID'];
+	$appPartID = $_POST['appPartID'];
+	$elementID = $_POST['elementID'];
+	
+	$db = new mysqli('localhost', $username, $password, $database);
+	
+	if(mysqli_connect_errno())
+	{
+		echo mysqli_connect_error();
+	}
+	$sql = sprintf("CALL uspDeleteElement(%d, %d, %d)", intval($appID), intval($appPartID), intval($elementID));
+	$result = $db->query($sql);
+	if ($result)
+	{
+		$redirect = sprintf("Location: ElementsDetail.php?AppID=%d&AppPartID=%d", intval($appID), intval($appPartID));
+		header($redirect);
+	}
+	else 
+	{
+		echo($db->error);
+	}
+}
 ?>
 </head>
 <body class="menu">
@@ -242,7 +252,8 @@ if (isset($_POST['addOptions']))
 		<input type="hidden" name="appPartID" value="<?php echo($appPartID);?>">
 		<input type="hidden" name="elementID" value="<?php echo($elementID);?>">
 		Element Details&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-		<input type="submit" value="Add New Element" name="addNewElement">
+		<input type="submit" value="Add New Element" name="addNewElement">&nbsp;
+		<input style="color: red;" type="submit" value="Delete Element" name="deleteElement" onClick="<?php printf("return confirm('This will delete the element %s. Are you sure you want to do this?');", $elementName);?>">
 	</form>
 </div>
 <div style="padding-top: 15px">
@@ -289,9 +300,9 @@ if (isset($_POST['addOptions']))
 		</tr>
 		<tr>
 			<td>Enabled:</td>
-			<td><input type="checkbox" name="isEnabled" disabled="disabled" value="1" <?php if($isEnabled ==1){ echo("checked");}?>></td>
+			<td><input type="checkbox" name="isEnabled" value="1" <?php if($isEnabled ==1){ echo("checked");}?>></td>
 			<td>Data Stored:</td>
-			<td><input type="checkbox" name="isStored" disabled="disabled" value="1" <?php if($isStored == 1){ echo("checked");}?>></td>
+			<td><input type="checkbox" name="isStored" value="1" <?php if($isStored == 1){ echo("checked");}?>></td>
 		</tr>
 		<tr>
 			<td>Data Type:</td>
