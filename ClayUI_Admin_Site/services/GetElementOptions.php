@@ -7,7 +7,7 @@ if(isset($_GET['AppID']) && intval($_GET['AppID']))
 	$username = $_SERVER['CLAYUI_USER'];
 	$password= $_SERVER['CLAYUI_PASS'];
 	$database=$_SERVER['CLAYUI_DB'];
-	$sql=sprintf("CALL uspGetElementOptions(%d);", intval($appID));
+	$sql=sprintf("CALL uspGetAllElementOptions(%d);", intval($appID));
 	$element_options = array();
 	
 	mysql_connect(localhost, $username, $password);
