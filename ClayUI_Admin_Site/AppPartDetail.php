@@ -87,6 +87,9 @@ if(isset($_POST['deleteAppPart']))
 <input type="hidden" name="appPartID" value="<?php echo($appPartID);?>">
 	<table>
 		<tr>
+			<td>Id:</td></td><td><?php echo($appPartID)?></td>
+		</tr>
+		<tr>
 			<td>Name:</td><td><input style="font-family: monospace; width: 500px; border: thin;" type="text" name="appName" value="<?php echo($appName);?>"></td>
 		</tr>
 		<tr>

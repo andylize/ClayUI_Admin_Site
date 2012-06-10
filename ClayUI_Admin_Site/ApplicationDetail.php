@@ -97,6 +97,9 @@ if (isset($_POST['deleteApplication']))
 <input type="hidden" name="appID" value="<?php echo($appID);?>">
 	<table>
 		<tr>
+			<td>Id:</td></td><td><?php echo($appID)?></td>
+		</tr>
+		<tr>
 			<td>Name:</td><td><input style="font-family: monospace; width: 500px; border: thin;" type="text" name="appName" value="<?php echo($appName);?>"></td>
 		</tr>
 		<tr>
